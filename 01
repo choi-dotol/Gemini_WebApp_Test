@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20분 모닝 타임어택 루틴 ☀️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        morning: {
+                            50: '#f6fbf7',
+                            100: '#eefcf1',
+                            200: '#d4f7da',
+                            300: '#a3eba1',
+                            400: '#6ad77e',
+                            500: '#10b981', // emerald
+                            600: '#059669',
+                            orange: '#ff8a5c',
+                            yellow: '#fbc02d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+        
+        /* 아침 안개 흐림 효과 및 스무스 애니메이션 */
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .pulse-soft {
+            animation: softPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes softPulse {
+            0%, 100% { transform: scale(1); opacity: 0.95; }
+            50% { transform: scale(1.02); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-emerald-50 min-h-screen text-slate-800 flex flex-col antialiased">
+
+    <!-- 상단 헤더 -->
+    <header class="w-full max-w-4xl mx-auto px-4 pt-6 pb-2 flex items-center justify-between">
+        <div class="flex items-center space-gap-2">
+            <span class="text-3xl mr-2">☀️</span>
+            <div>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-orange-500 to-emerald-600 bg-clip-text text-transparent">
+                    Miracle 20m
+                </h1>
+                <p class="text-xs text-slate-500">20분 초집중 모닝 타임어택</p>
+            </div>
+        </div>
+        <div id="date-badge" class="px-3 py-1 bg-white/75 border border-amber-200/50 rounded-full text-xs font-semibold text-amber-700 shadow-sm">
+            2026. 06. 13
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="flex-1 w-full max-w-4xl mx-auto px-4 py-4 flex flex-col justify-center">
+        
+        <!-- [메인 화면 UI] 테마 선택 -->
+        <section id="main-screen" class="space-y-6">
+            <div class="text-center space-y-2 py-4">
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-800">
+                    오늘 아침, 어떤 <span class="text-emerald-600">성장</span>을 이룰까요?
+                </h2>
+                <p class="text-slate-500 text-sm md:text-base">
+                    단 20분만 집중해서 최고의 시작을 만들어보세요.
+                </p>
+            </div>
+
+            <!-- 카드형 테마 목록 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <!-- 1. 대학원 진학 -->
+                <button type="button" onclick="selectTheme('대학원 진학')" 
+                    class="group relative overflow-hidden p-6 rounded-2xl border border-amber-200 bg-white hover:border-emerald-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-left">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-100 to-transparent opacity-50 rounded-bl-full group-hover:scale-110 transition-transform"></div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-amber-100 text-amber-600 rounded-xl group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
+                            <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">대학원 진학</h3>
+                            <p class="text-sm text-slate-500 mt-1">관심 랩실 탐색, 논문 요약 및 입시 서류 전략 수립</p>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- 2. 영어 자격증 -->
+                <button type="button" onclick="selectTheme('영어 자격증(TEPS/토스)')"
+                    class="group relative overflow-hidden p-6 rounded-2xl border border-amber-200 bg-white hover:border-emerald-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-left">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-blue-50 to-transparent opacity-50 rounded-bl-full group-hover:scale-110 transition-transform"></div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
+                            <i data-lucide="award" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">영어 자격증(TEPS, 토스)</h3>
+                            <p class="text-sm text-slate-500 mt-1">고난도 어휘 암기, 실전 기출 풀이 및 템플릿 체화</p>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- 3. 영어 회화 -->
+                <button type="button" onclick="selectTheme('영어 회화')"
+                    class="group relative overflow-hidden p-6 rounded-2xl border border-amber-200 bg-white hover:border-emerald-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-left">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-teal-50 to-transparent opacity-50 rounded-bl-full group-hover:scale-110 transition-transform"></div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-teal-50 text-teal-600 rounded-xl group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
+                            <i data-lucide="languages" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">영어 회화</h3>
+                            <p class="text-sm text-slate-500 mt-1">쉐도잉 연습, 원어민 표현 익히기 및 실전 스피킹</p>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- 4. 운동 -->
+                <button type="button" onclick="selectTheme('운동')"
+                    class="group relative overflow-hidden p-6 rounded-2xl border border-amber-200 bg-white hover:border-emerald-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-left">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-orange-50 to-transparent opacity-50 rounded-bl-full group-hover:scale-110 transition-transform"></div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-orange-50 text-orange-500 rounded-xl group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
+                            <i data-lucide="activity" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">운동</h3>
+                            <p class="text-sm text-slate-500 mt-1">공복 타바타, 홈 트레이닝 및 유연성 스트레칭</p>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- 5. 업무 관련 자격증 -->
+                <button type="button" onclick="selectTheme('업무 관련 자격증')"
+                    class="group relative overflow-hidden p-6 rounded-2xl border border-amber-200 bg-white hover:border-emerald-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-left md:col-span-2">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-purple-50 to-transparent opacity-50 rounded-bl-full group-hover:scale-110 transition-transform"></div>
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 bg-purple-50 text-purple-600 rounded-xl group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
+                            <i data-lucide="briefcase" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">업무 관련 자격증</h3>
+                            <p class="text-sm text-slate-500 mt-1">직무 역량 강화, 전문 자격증 이론 공부 및 핵심 요약</p>
+                        </div>
+                    </div>
+                </button>
+
+            </div>
+
+            <!-- 커스텀 입력창 -->
+            <div class="p-6 bg-white/70 border border-amber-200/70 rounded-2xl shadow-sm">
+                <label for="custom-theme" class="block text-sm font-bold text-slate-700 mb-2">💡 나만의 특별한 아침 미션 만들기</label>
+                <div class="flex gap-2">
+                    <input type="text" id="custom-theme" placeholder="예: 전공 기본 서적 독서, 뉴스클리핑 요약 등..." 
+                        class="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+                    <button type="button" onclick="startCustomTheme()"
+                        class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl text-sm whitespace-nowrap transition-colors flex items-center gap-1">
+                        시작하기 <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 유저 친화적 안내 메시지 -->
+            <div class="text-center py-4">
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-orange-500"></i> AI가 최적의 20분 시간 분배 가이드를 짜드립니다!
+                </span>
+            </div>
+        </section>
+
+        <!-- [로딩 화면] -->
+        <section id="loading-screen" class="hidden text-center py-12 space-y-6">
+            <div class="relative w-24 h-24 mx-auto">
+                <div class="absolute inset-0 rounded-full border-4 border-emerald-100 animate-pulse"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-emerald-500 animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-3xl">☕</div>
+            </div>
+            <div class="space-y-2">
+                <h3 id="loading-title" class="text-xl font-bold text-slate-800">모닝 플래너 AI 가 미션을 준비하는 중...</h3>
+                <p class="text-sm text-slate-500">당신의 소중한 20분을 조밀하게 계획하고 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- [미션 시작 화면 UI] -->
+        <section id="mission-screen" class="hidden space-y-6">
+            
+            <!-- 상단 바 정보 -->
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-2xl border border-slate-100 shadow-sm gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 uppercase font-bold">CURRENT PLAN</span>
+                        <h3 id="active-theme-title" class="font-bold text-lg text-slate-800">선택된 주제</h3>
+                    </div>
+                </div>
+                <button type="button" onclick="goToHome()" 
+                    class="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1 bg-slate-100 px-3 py-1.5 rounded-lg transition-colors">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> 다른 주제 선택하기
+                </button>
+            </div>
+
+            <!-- 타이머 & 스톱워치 메인 위젯 -->
+            <div class="glass p-6 md:p-8 rounded-3xl text-center space-y-6 shadow-md border-amber-100">
+                
+                <div class="space-y-1">
+                    <span class="text-xs tracking-wider text-orange-600 font-bold uppercase block pulse-soft">⏱️ TIME ATTACK TIMER</span>
+                    <!-- 큰 시계 표시 -->
+                    <div id="timer-display" class="text-6xl md:text-7xl font-mono font-black tracking-tighter text-slate-800">
+                        20:00
+                    </div>
+                </div>
+
+                <!-- 진행률 Bar -->
+                <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                    <div id="timer-progress-bar" class="bg-gradient-to-r from-orange-400 to-emerald-500 h-full w-full transition-all duration-1000"></div>
+                </div>
+
+                <!-- 타이머 버튼 컨트롤 -->
+                <div class="flex justify-center items-center gap-4">
+                    <button type="button" id="btn-toggle" onclick="toggleTimer()"
+                        class="w-32 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                        <i id="icon-toggle" data-lucide="play" class="w-5 h-5"></i> <span id="text-toggle">시작하기</span>
+                    </button>
+                    
+                    <button type="button" onclick="resetTimer()"
+                        class="px-5 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-2xl border border-slate-200 transition-colors flex items-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5"></i> 20분 리셋
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- AI 추천 3단계 체크박스 미션 -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b pb-3 border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">⚡</span>
+                        <h4 class="font-bold text-slate-800 text-base">AI 추천 초집중 3단계 루틴</h4>
+                    </div>
+                    <span class="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded">20분 타임박스</span>
+                </div>
+
+                <div class="space-y-3">
+                    <!-- Step 1 -->
+                    <label class="flex items-start gap-3 p-4 bg-slate-50/70 border border-transparent hover:border-slate-200 rounded-2xl cursor-pointer transition-all">
+                        <input type="checkbox" id="chk-step-1" onchange="checkMissionProgress()"
+                            class="mt-1 w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                        <div>
+                            <span class="text-xs font-bold text-amber-600 uppercase block mb-0.5">Step 1 (초반 5분)</span>
+                            <span id="step-1-text" class="text-sm font-semibold text-slate-700">정보 수집 및 목표 수립 단계</span>
+                        </div>
+                    </label>
+
+                    <!-- Step 2 -->
+                    <label class="flex items-start gap-3 p-4 bg-slate-50/70 border border-transparent hover:border-slate-200 rounded-2xl cursor-pointer transition-all">
+                        <input type="checkbox" id="chk-step-2" onchange="checkMissionProgress()"
+                            class="mt-1 w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-600 uppercase block mb-0.5">Step 2 (중반 10분)</span>
+                            <span id="step-2-text" class="text-sm font-semibold text-slate-700">고강도 핵심 몰입 및 학습 단계</span>
+                        </div>
+                    </label>
+
+                    <!-- Step 3 -->
+                    <label class="flex items-start gap-3 p-4 bg-slate-50/70 border border-transparent hover:border-slate-200 rounded-2xl cursor-pointer transition-all">
+                        <input type="checkbox" id="chk-step-3" onchange="checkMissionProgress()"
+                            class="mt-1 w-5 h-5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                        <div>
+                            <span class="text-xs font-bold text-orange-600 uppercase block mb-0.5">Step 3 (후반 5분)</span>
+                            <span id="step-3-text" class="text-sm font-semibold text-slate-700">아웃풋 및 핵심 회고 정리 단계</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 하단 텍스트 메모장 & 저장 기록 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- 텍스트 메모장 입력 -->
+                <div class="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">✍️</span>
+                        <h4 class="font-bold text-slate-800">오늘의 몰입 기록 & 느낌 점</h4>
+                    </div>
+                    <textarea id="routine-note" rows="4" 
+                        placeholder="이 미션을 끝내며 배운 점이나 나만의 성장 한마디를 적어주세요..."
+                        class="w-full p-4 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-slate-50/50"></textarea>
+                    
+                    <button type="button" onclick="saveRoutineLog()"
+                        class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl transition-colors flex items-center justify-center gap-2 shadow-sm">
+                        <i data-lucide="save" class="w-4 h-4"></i> 미션 일지에 저장하기
+                    </button>
+                </div>
+
+                <!-- 실시간 성공 누적 전당 -->
+                <div class="bg-gradient-to-br from-amber-500 to-orange-400 p-6 rounded-3xl text-white flex flex-col justify-between shadow-md relative overflow-hidden">
+                    <div class="absolute right-0 bottom-0 text-9xl opacity-10 pointer-events-none translate-x-4 translate-y-4 font-extrabold">🏆</div>
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-lg">기적의 아침 저널 ☀️</h4>
+                        <p class="text-xs opacity-90 leading-relaxed">매일 아침 20분의 타임어택이 쌓여 장기적인 성장을 선사합니다.</p>
+                    </div>
+                    <div class="pt-6 border-t border-white/20 mt-4">
+                        <span class="text-xs opacity-75">오늘 아침 총 성공 횟수</span>
+                        <div class="flex items-baseline gap-1 mt-1">
+                            <span id="total-success-count" class="text-4xl font-extrabold">0</span>
+                            <span class="text-sm font-bold">회 돌파!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 저장된 기록 목록 피드 -->
+            <div id="log-list-section" class="hidden bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+                <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="list-checks" class="w-5 h-5 text-emerald-500"></i> 기록된 아침 역사 목록
+                </h4>
+                <div id="logs-container" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+                    <!-- 로그가 동적으로 들어갑니다. -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- 커스텀 사운드용 오디오 생성 및 토스트 메시지 모달 -->
+    <div id="toast-message" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3.5 bg-slate-800 text-white text-sm font-semibold rounded-2xl shadow-xl border border-slate-700 transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> <span id="toast-text">성공적으로 처리되었습니다!</span>
+    </div>
+
+    <!-- 미션 완료 팝업 모달 -->
+    <div id="completion-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center space-y-6 shadow-2xl animate-bounce-short">
+            <div class="text-6xl">🎉</div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-black text-slate-800">모닝 타임어택 성공!</h3>
+                <p class="text-slate-500 text-sm">뜨거운 20분이 지났습니다. 당신의 찬란한 하루가 이미 최고의 기세를 탔습니다!</p>
+            </div>
+            <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-100 text-sm font-semibold text-emerald-800">
+                "성공은 거창한 것이 아닌, 매일 아침의 20분 약속을 지키는 데서 나옵니다."
+            </div>
+            <button type="button" onclick="closeCompletionModal()"
+                class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl transition-all shadow-md">
+                영광스러운 하루 시작하기
+            </button>
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="text-center py-6 text-xs text-slate-400 bg-white/40 mt-8 border-t border-slate-200/50">
+        © 2026 20m Morning Time Attack. All rights reserved.
+    </footer>
+
+    <script>
+        // 전역 상태 변수
+        let currentTheme = '';
+        let timeLeft = 1200; // 20분 (초)
+        let timerInterval = null;
+        let isRunning = false;
+        let routineLogs = [];
+        let successCount = 0;
+
+        // Gemini API 호출용 빈 키 (런타임 시 주입)
+        const apiKey = "";
+
+        // 백업용 테마별 기본 미션 (AI 통신 지연 혹은 실패 시 백업용)
+        const fallbackMissions = {
+            '대학원 정보': {
+                step1: '관심 분야 핵심 연구실(Lab) 2곳의 최신 연구 주제 조사 (5분)',
+                step2: '타깃 논문의 초록(Abstract)을 정독하고 핵심 로직 3가지 적어보기 (10분)',
+                step3: '올해 모집요강을 읽고 지원 필요 서류 목록 체크리스트 작성 (5분)'
+            },
+            'TEPS & 토스': {
+                step1: '오늘 마스터할 최신 기출 어휘 및 중요 표현 20개 빠르게 훑기 (5분)',
+                step2: '실전 모의 템플릿(파트 3~5) 기출 3문항 소리 내어 실전 말하기 (10분)',
+                step3: '녹음된 본인 목소리 자가 교정 및 자주 하는 발음 실수 3개 필기 (5분)'
+            },
+            '영어 회화': {
+                step1: '자주 쓰이는 원어민 생활 밀착 표현 5가지 자막 보며 숙지하기 (5분)',
+                step2: '주요 패턴 5문장을 구조만 바꾸어 자기 이야기로 15문장 만들기 (10분)',
+                step3: '각 문장을 자연스러운 억양과 제스처를 곁들여 3회씩 스피킹 (5분)'
+            },
+            '운동 & 다이어트': {
+                step1: '가벼운 관절 서클링 회전 운동 및 림프 순환 전신 전면 스트레칭 (5분)',
+                step2: '전신 체지방을 버닝하는 고강도 타바타 홈 트레이닝 4세트 (10분)',
+                step3: '따뜻한 물 한 컵 섭취 및 오늘 섭취할 건강 식단 가이드 메모 (5분)'
+            },
+            '기타': {
+                step1: '오늘 할 핵심 활동을 시각화하고 준비물 및 리소스 세팅하기 (5분)',
+                step2: '방해 금지 모드를 켜고 가장 난도 높은 본체 테스크에 원테이크 몰입 (10분)',
+                step3: '끝낸 분량의 결과를 정리하고 보완점 1가지를 명확히 수립 (5분)'
+            }
+        };
+
+        // 로드 시 초기 아이콘 렌더링 및 오늘 날짜 설정
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            setTodayDate();
+        });
+
+        // 오늘 날짜 표시
+        function setTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayName = days[today.getDay()];
+            document.getElementById('date-badge').innerText = `${year}. ${month}. ${day} (${dayName})`;
+        }
+
+        // 지수 백오프 방식의 fetch API 헬퍼 함수
+        async function fetchWithRetry(url, options, retries = 5, delay = 1000) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                if (retries === 0) throw error;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return fetchWithRetry(url, options, retries - 1, delay * 2);
+            }
+        }
+
+        // 테마 선택 처리
+        async function selectTheme(themeName) {
+            currentTheme = themeName;
+            document.getElementById('active-theme-title').innerText = themeName;
+            showScreen('loading-screen');
+            document.getElementById('loading-title').innerText = `AI가 [${themeName}] 20분 몰입 가이드를 짜고 있어요...`;
+
+            let steps = null;
+            
+            // 만약 API key가 제공된다면 Gemini 호출 시도
+            if (apiKey) {
+                try {
+                    steps = await generateAIMission(themeName);
+                } catch (e) {
+                    console.error("AI 미션 생성 실패, 로컬 백업 미션 탑재:", e);
+                }
+            }
+
+            // 실패했거나 API Key가 비어 있으면 백업 미션 제공
+            if (!steps) {
+                steps = fallbackMissions[themeName] || fallbackMissions['기타'];
+            }
+
+            applyMissionSteps(steps);
+            resetTimer();
+            showScreen('mission-screen');
+        }
+
+        // 커스텀 테마로 시작하기
+        async function startCustomTheme() {
+            const customInput = document.getElementById('custom-theme').value.trim();
+            if (!customInput) {
+                showToast("원하는 아침 미션 주제를 입력해 주세요!");
+                return;
+            }
+            currentTheme = customInput;
+            document.getElementById('active-theme-title').innerText = customInput;
+            showScreen('loading-screen');
+            document.getElementById('loading-title').innerText = `AI가 [${customInput}] 20분 몰입 가이드를 설계 중...`;
+
+            let steps = null;
+
+            if (apiKey) {
+                try {
+                    steps = await generateAIMission(customInput);
+                } catch (e) {
+                    console.error("AI 커스텀 미션 생성 실패, 로컬 기본 미션 탑재:", e);
+                }
+            }
+
+            if (!steps) {
+                // 커스텀의 경우, 템플릿 대체어 변형 적용
+                steps = {
+                    step1: `[${customInput}] 필요한 기본 도구/화면 배치 및 세부 실행 계획 수립 (5분)`,
+                    step2: `[${customInput}] 딴짓 금지! 핵심 목표 실현을 위한 고강도의 점진 몰입 (10분)`,
+                    step3: `[${customInput}] 수행 결과물 검토 및 만족도 점검, 내일의 개선 목표 정리 (5분)`
+                };
+            }
+
+            applyMissionSteps(steps);
+            resetTimer();
+            showScreen('mission-screen');
+        }
+
+        // Gemini 2.5 Flash API 호출 로직
+        async function generateAIMission(topic) {
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const systemPrompt = "너는 바쁜 현대인의 기적 같은 아침 시간을 단 20분 만에 극대화할 수 있도록 도와주는 전문 모닝 코치 플래너야. 유저가 입력한 학습이나 활동 주제에 맞춰 완전히 20분 동안 숨막히는 초집중 3단계(Step 1, 2, 3) 구체적인 퀘스트로 쪼개줘야 해. 각각의 시간 배분은 (5분/10분/5분) 합산 20분이 되어야 한다. 각 단계 끝에는 항상 추천 분량이나 실천 행동을 구체적으로 제시해줘.";
+
+            const userPrompt = `아침에 20분 동안 집중해서 실천하고 싶은 주제: "${topic}". 이 주제에 최적화된 초정밀 3단계(Step 1, 2, 3) 행동 요령과 타임박스 시간을 한국어로 작성해줘. 응답은 무조건 순수하고 완벽한 JSON 오브젝트로만 보내줘. 다른 사담이나 백틱(\`\`\`) 없이 정밀하게 다음 형식의 JSON 포맷만 보낼 것:
+            {"step1": "여기에 1단계 정보 및 가이드", "step2": "여기에 2단계 정보 및 가이드", "step3": "여기에 3단계 정보 및 가이드"}`;
+
+            const requestBody = {
+                contents: [{
+                    parts: [{ text: userPrompt }]
+                }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            step1: { type: "STRING" },
+                            step2: { type: "STRING" },
+                            step3: { type: "STRING" }
+                        },
+                        required: ["step1", "step2", "step3"]
+                    }
+                }
+            };
+
+            const result = await fetchWithRetry(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(requestBody)
+            });
+
+            // JSON 파싱 후 리턴
+            const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (textResponse) {
+                return JSON.parse(textResponse);
+            }
+            throw new Error("올바른 응답을 받지 못했습니다.");
+        }
+
+        // UI 미션 단계 텍스트 주입
+        function applyMissionSteps(steps) {
+            document.getElementById('step-1-text').innerText = steps.step1;
+            document.getElementById('step-2-text').innerText = steps.step2;
+            document.getElementById('step-3-text').innerText = steps.step3;
+
+            // 체크박스 초기화
+            document.getElementById('chk-step-1').checked = false;
+            document.getElementById('chk-step-2').checked = false;
+            document.getElementById('chk-step-3').checked = false;
+        }
+
+        // 화면 전환 헬퍼
+        function showScreen(screenId) {
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('loading-screen').classList.add('hidden');
+            document.getElementById('mission-screen').classList.add('hidden');
+
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        // 메인 홈으로 돌려놓기
+        function goToHome() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            showScreen('main-screen');
+        }
+
+        // 타이머 컨트롤 로직
+        function toggleTimer() {
+            if (isRunning) {
+                // 일시 정지
+                clearInterval(timerInterval);
+                isRunning = false;
+                updateTimerUIBtn(false);
+            } else {
+                // 시작
+                isRunning = true;
+                updateTimerUIBtn(true);
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        // 시간 완료 처리
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        updateTimerUIBtn(false);
+                        triggerSuccess();
+                    }
+                }, 1000);
+            }
+        }
+
+        // 타이머 초기화 (20분)
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = 1200; // 1200초 = 20분
+            updateTimerDisplay();
+            updateTimerUIBtn(false);
+        }
+
+        // 타이머 디스플레이 변경
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer-display').innerText = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // 프로그레스 바 갱신 (전체 1200초 비례 감소형식)
+            const percentage = (timeLeft / 1200) * 100;
+            document.getElementById('timer-progress-bar').style.width = `${percentage}%`;
+        }
+
+        // 타이머 토글 버튼 상태 갱신
+        function updateTimerUIBtn(running) {
+            const btn = document.getElementById('btn-toggle');
+            const icon = document.getElementById('icon-toggle');
+            const text = document.getElementById('text-toggle');
+
+            if (running) {
+                btn.classList.remove('bg-emerald-500', 'hover:bg-emerald-600');
+                btn.classList.add('bg-orange-500', 'hover:bg-orange-600');
+                icon.setAttribute('data-lucide', 'pause');
+                text.innerText = "일시정지";
+            } else {
+                btn.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+                btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600');
+                icon.setAttribute('data-lucide', 'play');
+                text.innerText = "시작하기";
+            }
+            lucide.createIcons();
+        }
+
+        // 미션 체크 모니터링
+        function checkMissionProgress() {
+            const c1 = document.getElementById('chk-step-1').checked;
+            const c2 = document.getElementById('chk-step-2').checked;
+            const c3 = document.getElementById('chk-step-3').checked;
+
+            if (c1 && c2 && c3) {
+                // 3개 미션이 모두 해결되었을 시
+                showToast("최고예요! 3단계 미션을 모두 격파 완료했습니다 🌟");
+                playShortBeep(600, 0.1);
+                playShortBeep(800, 0.15);
+            }
+        }
+
+        // 미션 완수 이벤트 (타이머 완료 시)
+        function triggerSuccess() {
+            playCompletionSound();
+            
+            // 폭죽 효과 연출
+            confetti({
+                particleCount: 150,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+
+            document.getElementById('completion-modal').classList.remove('hidden');
+        }
+
+        function closeCompletionModal() {
+            document.getElementById('completion-modal').classList.add('hidden');
+            successCount++;
+            document.getElementById('total-success-count').innerText = successCount;
+        }
+
+        // 미션 일지 저장하기
+        function saveRoutineLog() {
+            const noteText = document.getElementById('routine-note').value.trim();
+            if (!noteText) {
+                showToast("기록할 내용을 한 글자 이상 적어주세요!");
+                return;
+            }
+
+            const now = new Date();
+            const timeString = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const c1 = document.getElementById('chk-step-1').checked;
+            const c2 = document.getElementById('chk-step-2').checked;
+            const c3 = document.getElementById('chk-step-3').checked;
+            
+            const stepsCompleted = (c1 ? 1 : 0) + (c2 ? 1 : 0) + (c3 ? 1 : 0);
+
+            const newLog = {
+                id: Date.now(),
+                theme: currentTheme,
+                time: timeString,
+                note: noteText,
+                stars: stepsCompleted
+            };
+
+            routineLogs.unshift(newLog); // 최신글 상단
+            renderLogs();
+            
+            // 필드 초기화 및 토스트 안내
+            document.getElementById('routine-note').value = '';
+            showToast("오늘 아침 성공 일지에 기록되었습니다. 고생하셨습니다!");
+            playShortBeep(500, 0.15);
+        }
+
+        // 일지 목록 리렌더링
+        function renderLogs() {
+            const listSection = document.getElementById('log-list-section');
+            const container = document.getElementById('logs-container');
+            
+            if (routineLogs.length === 0) {
+                listSection.classList.add('hidden');
+                return;
+            }
+
+            listSection.classList.remove('hidden');
+            container.innerHTML = '';
+
+            routineLogs.forEach(log => {
+                let starsHTML = '';
+                for(let i=0; i<3; i++) {
+                    if (i < log.stars) {
+                        starsHTML += '⭐';
+                    } else {
+                        starsHTML += '⬜';
+                    }
+                }
+
+                const logItem = document.createElement('div');
+                logItem.className = 'p-4 bg-slate-50 border border-slate-100 rounded-2xl flex justify-between items-start gap-4 transition-all hover:bg-slate-100/70';
+                logItem.innerHTML = `
+                    <div class="space-y-1.5 flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-md">${log.theme}</span>
+                            <span class="text-xs text-slate-400 font-semibold">${log.time} 기록</span>
+                            <span class="text-xs">${starsHTML}</span>
+                        </div>
+                        <p class="text-sm text-slate-600 font-medium">${log.note}</p>
+                    </div>
+                    <button onclick="deleteLog(${log.id})" class="text-slate-300 hover:text-red-500 transition-colors p-1" title="삭제">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                `;
+                container.appendChild(logItem);
+            });
+            lucide.createIcons();
+        }
+
+        // 일지 삭제
+        function deleteLog(id) {
+            routineLogs = routineLogs.filter(log => log.id !== id);
+            renderLogs();
+            showToast("기록이 성공적으로 삭제되었습니다.");
+        }
+
+        // 토스트 메시지 함수
+        function showToast(message) {
+            const toast = document.getElementById('toast-message');
+            const toastText = document.getElementById('toast-text');
+            toastText.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Web Audio API를 활용한 효과음 구현
+        function playShortBeep(freq, duration) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.type = 'sine';
+                oscillator.frequency.value = freq;
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("AudioContext is blocked or not supported on this browser.");
+            }
+        }
+
+        // 성공 브라스 사운드
+        function playCompletionSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const chords = [261.63, 329.63, 392.00, 523.25]; // Do-Mi-Sol-Do 화음
+
+                chords.forEach((freq, idx) => {
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.value = freq;
+                    
+                    const startTime = audioCtx.currentTime + (idx * 0.12);
+                    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.15, startTime + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.8);
+
+                    oscillator.start(startTime);
+                    oscillator.stop(startTime + 0.8);
+                });
+            } catch (e) {
+                console.log("AudioContext is blocked or not supported on this browser.");
+            }
+        }
+    </script>
+</body>
+</html>
